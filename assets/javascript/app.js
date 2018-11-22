@@ -1,14 +1,12 @@
 $(document).ready(function () {
     
 var topics = ["Simpsons", "Futurama", "Bob's Burgers", "Venture Brothers", "Superjail", "Space Ghost Coast to Coast"];
-// var searchTerm = CRITICAL! trim version of a specific topic. this will take several steps. I need to replace any spaces with plus signs which seems like a PITA.
-// okay it goes like this: str = str.replace(" ", "+");
-// var topicSubmit = "";
+
 
 function writeLayout(){
     $("#main-div").append("<div id=topics-div></div>");
-    $("#main-div").append("<div id=add-topic-button>i exist</div>");
-    $("#main-div").append("<div id=show-gifs>i also exist</div>");
+    
+    $("#main-div").append("<div id=show-gifs></div>");
 }
 
 // click events
@@ -44,33 +42,23 @@ function displayTopRow(){
         $("#topics-div").append(topButtons)
     }
 }
-console.log(topics)
+
+function userButton(){
+    $("#user-submit").on("click", function() {
+    var userAddition = $("#user-show").val().trim();
+    topics.push(userAddition);
+    displayTopRow();
+    });
+}
+
 
     // function to add another term to topics. 1: 
-// function to remove. look up array commands, remove (topics.length-1)?
+// function to remove. look up array commands, 
 
-// function addToTopics(){
-//     // $("#add-topic-button").on("click", function(){
-//     //     var extraShow = 
-//     // }
-
-    
-// }
+// function addToTopics()
 
 // function to show gifs. 1: a var for (this.attr). 2: a var that converts all the spaces var1 into plus signs for URL functionality. 3. function response = data. 4. loop results across var = newDiv. 5. take the rating (G, PG, etc) from the ajax object and append to the div. 6: add stationary gif from the ajax object and append to the div.
 
-
-// var searchTerm = topics[];
-
-// for (let i = 0; i < topics.length; i++) {
-    
-
-
-    // // I cribbed the following regex from googling how to do find/replace.
-    // searchTerm = searchTerm.replace(/\s/g, "+");
-    // }
-
-    console.log(topics)
 
     // searchTerm = searchTerm.replace(/\s/g, "+");
     // console.log(searchTerm)
@@ -82,50 +70,40 @@ function showGifs(){
     
     var queryURL = "http://api.giphy.com/v1/gifs/search?q=" + searchTerm + "&api_key=" + apiKey + "&limit=10";
     
-        $.ajax({
+    $.ajax({
           url: queryURL,
           method: "GET"
-        }).then(function(response) {
+    }).then(function(response) {
           console.log(response);
-            $("#show-gifs-div").empty();
-            var mainBody = response.data;
-            for (let i = 0; i < mainBody.length; i++) {
-                var newDiv = $("<div>");
-                newDiv.addClass("gif");
-                var gifRating = $("<p>").text(mainBody[i].rating);
-                newDiv.append(gifRating);
-                var gifItself = $("<img>");
-                gifItself.addClass("gif");
-                gifItself.attr("data-state", "still");
-                gifItself.attr("src", mainBody[i].images.fixed_height_still.url);
-                gifItself.attr("data-still", mainBody[i].images.fixed_height_still.url);
-                gifItself.attr("data-animate", mainBody[i].images.fixed_height.url);
-                newDiv.append(gifItself);
-                $("#show-gifs").append(newDiv);
+        $("#show-gifs").empty();
+        var mainBody = response.data;
+        for (let i = 0; i < mainBody.length; i++) {
+            var newDiv = $("<div>");
+            newDiv.addClass("gif");
+
+            var gifRating = $("<p>").text("rated: " + mainBody[i].rating);
+            newDiv.append(gifRating);
+            
+            var gifItself = $("<img>");
+            gifItself.addClass("gif");
+            gifItself.attr("data-state", "still");
+            gifItself.attr("src", mainBody[i].images.fixed_height_still.url);                gifItself.attr("data-still", mainBody[i].images.fixed_height_still.url);
+            gifItself.attr("data-animate", mainBody[i].images.fixed_height.url);
+            newDiv.append(gifItself);
+            $("#show-gifs").append(newDiv);
                 
             }
           
         });
     }
-        
-// $("button").on("click", function(){
-    
-  
 
 
-// }
 
-// API functionality
-
-
-    // then(function(response) {
-    //     $("#movies-view").text(JSON.stringify(response));
-    //   });
-
-// all necessary variables
+// all necessary functions
 
 writeLayout();
 displayTopRow();
+userButton();
 showGifs();
 
 

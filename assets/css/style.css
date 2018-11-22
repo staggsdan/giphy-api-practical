@@ -1,11 +1,33 @@
+body {
+    margin: 0 50px 0 50px;
+}
 
+#main-div {
+    width: 70%;
+}
+
+#add-topic-button{
+    float: right;
+    margin: 0 60px 0 0;
+   
+}
 
 .top-buttons{
     background-color: lightgreen;
     border-radius: 25px;
-    margin: 5px 5px 5px 5px;
+    margin: 15px 5px 25px 5px;
 }
 
-.gifs{
-    
+#topics-div {
+    vertical-align: middle;
 }
+
+.gif{
+    align-items: center;
+}
+
+img {
+    margin: 0 0 30px 0;
+}
+
+
