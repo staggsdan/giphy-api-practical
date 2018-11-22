@@ -16,7 +16,22 @@ function writeLayout(){
 // click on add term button to run add term function
 $(document).on("click", ".top-buttons", showGifs);
 
-// function to display topics as buttons across the top. 1: name the var. 2: empty the html div ID like in the class activity, so there isn't a feedback loop. 3. write a for loop and within that loop, set a var, add <button> and text html (would class help?). possibly an attr?
+// gif click exercise 3.5.15. followed closely, checked for differences, can't figure out why it isn't swapping
+$(".gif").on("click", function(){
+    var state = $(this).attr("data-state");
+    console.log(state)
+    if (state === "still"){
+      var animate = $(this).attr("data-animate");
+      $(this).attr("src", animate)
+      $(this).attr("data-state", "animate")
+    } else {
+      var stillGif = $(this).attr("data-still");
+      $(this).attr("src", stillGif);
+      $(this).attr("data-state", "still")
+    }
+});
+
+// function to display topics as buttons across the top. 1: name the var. 2: empty the html div ID like in the class activity, so there isn't a negative feedback loop. 3. write a for loop and within that loop, set a var, add <button> and text html (would class help?). possibly an attr?
 
 
 function displayTopRow(){
@@ -27,7 +42,6 @@ function displayTopRow(){
         topButtons.attr("data-name", topics[i]);
         topButtons.addClass("top-buttons")
         $("#topics-div").append(topButtons)
-        console.log(topButtons)
     }
 }
 console.log(topics)
@@ -62,23 +76,30 @@ console.log(topics)
     // console.log(searchTerm)
 function showGifs(){    
 
+    var searchTerm = $(this).attr("data-name");
     var apiKey = "uRB2c2R6GBVWaNSKFvlmsqZZwBzkRe9P";
     
-    var queryURL = "http://api.giphy.com/v1/gifs/search?q=" + topics[1] + "&api_key=" + apiKey + "&limit=10";
+    
+    var queryURL = "http://api.giphy.com/v1/gifs/search?q=" + searchTerm + "&api_key=" + apiKey + "&limit=10";
     
         $.ajax({
           url: queryURL,
           method: "GET"
         }).then(function(response) {
-        //   console.log(response);
+          console.log(response);
             $("#show-gifs-div").empty();
             var mainBody = response.data;
             for (let i = 0; i < mainBody.length; i++) {
                 var newDiv = $("<div>");
+                newDiv.addClass("gif");
                 var gifRating = $("<p>").text(mainBody[i].rating);
                 newDiv.append(gifRating);
                 var gifItself = $("<img>");
-                gifItself.attr("src", mainBody[i].images.fixed_height_small_still.url);
+                gifItself.addClass("gif");
+                gifItself.attr("data-state", "still");
+                gifItself.attr("src", mainBody[i].images.fixed_height_still.url);
+                gifItself.attr("data-still", mainBody[i].images.fixed_height_still.url);
+                gifItself.attr("data-animate", mainBody[i].images.fixed_height.url);
                 newDiv.append(gifItself);
                 $("#show-gifs").append(newDiv);
                 
